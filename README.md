@@ -46,3 +46,33 @@ This project is Dockerized. Please follow these steps to configure and deploy th
    Once the application is running, you can access it via the following URLs:
    - **Chatbot Interface**: Open a web browser and go to [http://localhost:3000/chat](http://localhost:3000/chat)
    - **Admin Interface**: Open a web browser and go to [http://localhost:3000/admin](http://localhost:3000/admin)
+
+
+
+### Architecture
+
+![image-20241014075005832](./README.assets/image-20241014075005832.png)
+
+### Workflow for Capability Map 
+There are two roles in the system, Admin and Business Architect. As the system administrator, Admin is responsible for configuring the prompt and inputting and updating prompt through the admin terminal. Business Architect asks questions to the chatbot through the dialogue interface, queries the capability map of a specific industry, or uploads files/pictures to consult and request to draw a BPMN diagram. The system generates answers based on the prompts that are pre-configured by the Admin. And then the chatbot displays the results in a visual form according to the needs of the Business Architect. 
+
+![image-20241014075227984](./README.assets/image-20241014075227984.png)
+Flow of capability components: 
+
+- Admin configures prompts through the management terminal 
+
+- The backend server stores prompts in a SQLite database, called Prompt Library. 
+
+- When Business Architect queries {industry}{capability map} through the dialogue interface or uploads files/pictures to consult questions. 
+
+- The dialogue interface sends Business Architect's problem description and files to the system backend, also called Prompt Engine. 
+
+- Prompt Engine retrieves relevant prompts configured by Admin from Prompt Library. 
+
+- Prompt Engine processes the pictures/files uploaded by Business Architect, and combines the retrieved prompt information with the architect's query question to form an API request, which is then sent to the Large Language Model (LLM), i.e. OpenAI. 
+
+- After receiving the request, LLM generates text content and transmits it to Prompt Engine. 
+
+- Prompt Engine sends the received text content to Visualization Engine, which processes the content and converts it into a format that can be received by the front end. 
+
+- The conversation interface displays the visual BPMN/Capability Map and text content to Business Architect. 
