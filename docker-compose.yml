@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000" # mapping the external port 3333 to container's internal port 3000 (on your computer use localhost:3333)
+    volumes: # every time you make a change, this will reload the changes in the container
+      - ./frontend/src:/app/src # write these as ./<path to folder>:/<path to folder in container>
+
+  web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
